@@ -6,6 +6,7 @@ import com.RetrieveOrders.Retrieve.Orders.Service.ReplenishOrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,6 @@ import java.util.List;
 @RequestMapping("/api/replenish-orders")
 @RequiredArgsConstructor
 @Slf4j
-
 public class ReplenishOrderController {
 
     @Autowired
@@ -31,6 +31,14 @@ public class ReplenishOrderController {
         String role = JwtUtils.getRoleFromToken(token);
         String userId = JwtUtils.getUserIdFromToken(token);
         log.info("Call service to get filtered orders");
+
+
+        if (role == null || userId == null) {
+            log.error("Token parsing failed");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        System.out.println("Role: " + role + ", User ID: " + userId);
 
         List<ReplenishOrder> orders = replenishOrderService.getOrdersByRoleAndStatus(role, userId, status);
 

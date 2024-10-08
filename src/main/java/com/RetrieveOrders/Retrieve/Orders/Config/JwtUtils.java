@@ -2,13 +2,16 @@ package com.RetrieveOrders.Retrieve.Orders.Config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class JwtUtils {
 
-    private static final String SECRET_KEY = "your_secret_key_here";
+    private static final String SECRET_KEY = "";
 
-    public static String getRoleFromToken(String token) {
-        // Decode JWT and extract user role
+    public  static String getRoleFromToken(String token) {
+
+        log.info("Decode JWT and extract user ");
         try {
             Claims claims = Jwts.parser()
                     .setSigningKey(SECRET_KEY)
@@ -16,14 +19,15 @@ public class JwtUtils {
                     .getBody();
             return claims.get("role", String.class);
         } catch (Exception e) {
-            // Handle token parsing exceptions (e.g., expired token, invalid signature)
-            return null; // Or throw an appropriate exception
+            log.error("token parsing exceptions (e.g., expired token, invalid signature)\n");
+            System.err.println("Failed to parse token for role: " + e.getMessage());
+            return null; // Or throw a custom exception
         }
     }
 
 
     public static String getUserIdFromToken(String token) {
-        // Decode JWT and extract user ID
+        log.info("Decode JWT and extract user ");
         try {
             Claims claims = Jwts.parser()
                     .setSigningKey(SECRET_KEY)
@@ -31,10 +35,14 @@ public class JwtUtils {
                     .getBody();
             return claims.getSubject(); // assuming the userId is the subject
         } catch (Exception e) {
-            // Handle token parsing exceptions
-            return null; // Or throw an appropriate exception
+
+            log.error("token parsing exceptions");
+            System.err.println("Failed to parse token for user ID: " + e.getMessage());
+            return null;
         }
     }
+
+
 
 
 

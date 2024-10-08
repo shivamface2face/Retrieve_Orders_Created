@@ -1,5 +1,6 @@
 package com.RetrieveOrders.Retrieve.Orders.Service.Impl;
 
+import com.RetrieveOrders.Retrieve.Orders.Config.JwtUtils;
 import com.RetrieveOrders.Retrieve.Orders.Entity.ReplenishOrder;
 import com.RetrieveOrders.Retrieve.Orders.Reposotries.ReplenishOrderReposotries;
 import com.RetrieveOrders.Retrieve.Orders.Service.ReplenishOrderService;
@@ -43,8 +44,23 @@ public class ReplenishOrderServiceImpl implements ReplenishOrderService {
             default:
                 System.out.println("User role not recognized");
         }
-
         return orders;
-
     }
+
+
+    public void validateToken(String token) {
+        String role = JwtUtils.getRoleFromToken(token);
+        String userId = JwtUtils.getUserIdFromToken(token);
+        if (role == null || userId == null) {
+            throw new IllegalArgumentException("Token is invalid or expired.");
+        }
+        System.out.println("Role: " + role + ", User ID: " + userId);
+    }
+
+
+
+
+
+
+
 }
